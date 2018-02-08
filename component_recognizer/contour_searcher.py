@@ -7,48 +7,27 @@ LOG = logging.getLogger(__name__)
 
 class ContourSearcher():
 
-    create_intermediate_images = True
-    canny_threshold = {
-        'low': 40,
-        'high': 120
-    }
-    bilateral = {
-        'diameter_of_neighborhood_pixel': 7,
-        # Filter sigma in the color space.
-        # A larger value of the parameter means that farther colors
-        # within the pixel neighborhood (see sigmaSpace )
-        # will be mixed together,
-        # resulting in larger areas of semi-equal color.
-        'sigma_color': 100,
-        # Filter sigma in the coordinate space.
-        # A larger value of the parameter means that farther
-        # pixels will influence
-        # each other as long as their colors are close enough
-        'sigma_space': 75
-    }
+    create_intermediate_images = False
     harris_corners = {
         'neighbourhood_block_size': 2,
         'sobel_derivative_aperture': 3,
         'free_parameter': 0.04
     }
 
-    # this color used for filtering pcb image by color
-    delta_sensitivity = 20
-    # hsv pink: [136 105 255]
-    clean_pcb_bg = np.array([
-        136,
-        105,
-        255])
-    pcb_mask = {
-        'hsv_min': np.array([
-            clean_pcb_bg[0] - delta_sensitivity,
-            50,
-            50]),
-        'hsv_max': np.array([
-            clean_pcb_bg[0] + delta_sensitivity,
-            255,
-            255])
-    }
+    def __init__(
+        self,
+        clean_pcb_bg,
+            delta_sensitivity=20):
+        self.pcb_mask = {
+            'hsv_min': np.array([
+                clean_pcb_bg[0] - delta_sensitivity,
+                50,
+                50]),
+            'hsv_max': np.array([
+                clean_pcb_bg[0] + delta_sensitivity,
+                255,
+                255])
+        }
 
     # function find only background of the image
     # input: RGB image read by cv2.imread
@@ -194,3 +173,4 @@ class ContourSearcher():
             cv2.imwrite(
                 "Calibrator:find_contour_dots:4_image_with_corners.png",
                 image_with_corners)
+        return pcb_corners
