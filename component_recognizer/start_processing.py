@@ -6,7 +6,7 @@ import component_recognizer.settings as settings
 import component_recognizer.calibrator as calibrator
 import component_recognizer.contour_searcher as contour_searcher
 import component_recognizer.warper as warper
-
+import component_recognizer.histogram_equalizator as histogram_equalizator
 
 test_image = cv2.imread(
     os.path.join(
@@ -32,6 +32,7 @@ def main():
     contour_searcher_m = contour_searcher.ContourSearcher(
         clean_pcb_bg)
     warper_m = warper.Warper()
+    hist_equalizator_m = histogram_equalizator.HistEqualizator()
     # get calibration
     # camera_calibration = calibrator_m.get_calibration(
         # settings_m.calibration_file_folder)
@@ -41,9 +42,12 @@ def main():
     test_image_calibrated = test_image
     pcb_corners = contour_searcher_m.find_contour_dots(
         test_image_calibrated)
-    warped_image = warper_m.warp(
-        test_image_calibrated,
-        pcb_corners)
+    warped_image = test_image_calibrated
+    # warped_image = warper_m.warp(
+    #     test_image_calibrated,
+    #     pcb_corners)
+    image_equalizated = hist_equalizator_m.equalizate(
+        warped_image)
 
 
 if __name__ == '__main__':
