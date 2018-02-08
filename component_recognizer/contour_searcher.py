@@ -130,13 +130,13 @@ class ContourSearcher():
         all_corners = sorted(
             all_corners,
             key=lambda value: value[3])
-        corners["x_min"] = (all_corners[0][3], all_corners[0][2])
-        corners["x_max"] = (all_corners[-1][3], all_corners[-1][2])
+        corners["y_min"] = (all_corners[0][2], all_corners[0][3])
+        corners["y_max"] = (all_corners[-1][2], all_corners[-1][3])
         all_corners = sorted(
             all_corners,
             key=lambda value: value[2])
-        corners["y_min"] = (all_corners[0][3], all_corners[0][2])
-        corners["y_max"] = (all_corners[-1][3], all_corners[-1][2])
+        corners["x_min"] = (all_corners[0][2], all_corners[0][3])
+        corners["x_max"] = (all_corners[-1][2], all_corners[-1][3])
         return corners
 
     # "x_min"
@@ -158,17 +158,17 @@ class ContourSearcher():
         # LOG.debug("pcb_corners: %s" % (pcb_corners,))
         image_with_corners = image.copy()
         image_with_corners[
-            pcb_corners["x_min"][0],
-            pcb_corners["x_min"][1]] = [255, 255, 255]
+            pcb_corners["x_min"][1],
+            pcb_corners["x_min"][0]] = [255, 255, 255]
         image_with_corners[
-            pcb_corners["x_max"][0],
-            pcb_corners["x_max"][1]] = [255, 255, 255]
+            pcb_corners["x_max"][1],
+            pcb_corners["x_max"][0]] = [255, 255, 255]
         image_with_corners[
-            pcb_corners["y_min"][0],
-            pcb_corners["y_min"][1]] = [255, 255, 255]
+            pcb_corners["y_min"][1],
+            pcb_corners["y_min"][0]] = [255, 255, 255]
         image_with_corners[
-            pcb_corners["y_max"][0],
-            pcb_corners["y_max"][1]] = [255, 255, 255]
+            pcb_corners["y_max"][1],
+            pcb_corners["y_max"][0]] = [255, 255, 255]
         if self.create_intermediate_images:
             cv2.imwrite(
                 "Calibrator:find_contour_dots:4_image_with_corners.png",

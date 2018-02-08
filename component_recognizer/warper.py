@@ -19,10 +19,10 @@ class Warper():
             corners):
 
         polygon = [
-            corners["y_min"],
             corners["x_max"],
             corners["y_max"],
-            corners["x_min"]
+            corners["x_min"],
+            corners["y_min"]
         ]
 
         img_size = (

@@ -42,10 +42,9 @@ def main():
     test_image_calibrated = test_image
     pcb_corners = contour_searcher_m.find_contour_dots(
         test_image_calibrated)
-    warped_image = test_image_calibrated
-    # warped_image = warper_m.warp(
-    #     test_image_calibrated,
-    #     pcb_corners)
+    warped_image = warper_m.warp(
+        test_image_calibrated,
+        pcb_corners)
     image_equalizated = hist_equalizator_m.equalizate(
         warped_image)
 
