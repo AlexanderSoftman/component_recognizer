@@ -9,7 +9,7 @@ test_image = cv2.imread(
     os.path.join(
         os.path.split(__file__)[0],
         "pcb_images",
-        "pcb_1.jpg"))
+        "pcb_pink_bg_3.jpg"))
 
 
 def main():
