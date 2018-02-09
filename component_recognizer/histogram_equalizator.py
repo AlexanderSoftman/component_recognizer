@@ -6,7 +6,7 @@ LOG = logging.getLogger(__name__)
 
 class HistEqualizator():
 
-    create_intermediate_images = True
+    create_intermediate_images = False
 
     # input:
     # image
