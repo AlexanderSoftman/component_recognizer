@@ -7,7 +7,8 @@ LOG = logging.getLogger(__name__)
 
 class ContourSearcher():
 
-    create_intermediate_images = True
+    create_intermediate_images = False
+
     harris_corners = {
         'neighbourhood_block_size': 2,
         'sobel_derivative_aperture': 3,
@@ -49,14 +50,14 @@ class ContourSearcher():
 
         if self.create_intermediate_images:
             cv2.imwrite(
-                "Calibrator:find_contour_dots:2_bg_mask.png",
+                "ContourSearcher:find_contour_dots:2_bg_mask.png",
                 mask)
         # morphological opening to background mask
         kernel = np.ones((15, 15), np.uint8)
         bg_mask_opening = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
         if self.create_intermediate_images:
             cv2.imwrite(
-                "Calibrator:find_contour_dots:3_bg_mask_opening.png",
+                "ContourSearcher:find_contour_dots:3_bg_mask_opening.png",
                 bg_mask_opening)
         return bg_mask_opening
 
@@ -66,7 +67,34 @@ class ContourSearcher():
     # output array of corners res_corners
     # res_corners[:, 3] - x?
     # res_corners[:, 2] - y?
+
     def find_corners(self, bg_mask):
+        # Shi-Tomashi test algorithm
+        # maximum_corners = 6
+        # quality_level = 0.01
+        # minimum_distance = 500
+        #
+        # corners = cv2.goodFeaturesToTrack(
+        #     bg_mask,
+        #     maximum_corners,
+        #     quality_level,
+        #     minimum_distance)
+        # corners = np.int0(corners)
+        # LOG.critical("count of corners: %s, corners: %s" % (
+        #    len(corners), corners))
+        # for i in corners:
+        #     x, y = i.ravel()
+        #     cv2.circle(
+        #         self.image_m,
+        #         (x, y),
+        #         3,
+        #         255,
+        #         -1)
+        # if self.create_intermediate_images:
+        #     cv2.imwrite(
+        #         "ContourSearcher:find_contour_dots:-1_testing_Shi-Tomashi algorithm.png",
+        #         self.image_m)
+
         # find Harris corners
         bg_mask = np.float32(bg_mask)
         dst = cv2.cornerHarris(
@@ -137,6 +165,7 @@ class ContourSearcher():
             key=lambda value: value[2])
         corners["x_min"] = (all_corners[0][2], all_corners[0][3])
         corners["x_max"] = (all_corners[-1][2], all_corners[-1][3])
+        # LOG.critical("old method corners: %s" % (corners,))
         return corners
 
     # "x_min"
@@ -147,9 +176,11 @@ class ContourSearcher():
     def find_contour_dots(
         self,
             image):
+        # test only
+        self.image_m = image.copy()
         if self.create_intermediate_images:
             cv2.imwrite(
-                "Calibrator:find_contour_dots:1_original_image.png",
+                "ContourSearcher:find_contour_dots:1_original_image.png",
                 image)
         bg_mask = self.find_bg_only(image)
         res_corners = self.find_corners(bg_mask)
@@ -171,6 +202,6 @@ class ContourSearcher():
             pcb_corners["y_max"][0]] = [255, 255, 255]
         if self.create_intermediate_images:
             cv2.imwrite(
-                "Calibrator:find_contour_dots:4_image_with_corners.png",
+                "ContourSearcher:find_contour_dots:4_image_with_corners.png",
                 image_with_corners)
         return pcb_corners

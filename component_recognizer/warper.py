@@ -9,7 +9,7 @@ LOG = logging.getLogger(__name__)
 # class should save pcb geometric size as it was
 class Warper():
 
-    create_intermediate_images = True
+    create_intermediate_images = False
 
     # function get img and returned warped img
     # input:
@@ -71,7 +71,7 @@ class Warper():
             corners["x_min"],
             corners["y_min"]
         ]
-        LOG.critical("img_size: %s" % (img_size,))
+        # LOG.critical("img_size: %s" % (img_size,))
         pcb_sides = {
             "x_side": math.sqrt(
                 math.pow(corners["x_max"][0] - corners["y_min"][0], 2) +
@@ -80,11 +80,11 @@ class Warper():
                 math.pow(corners["x_max"][0] - corners["y_max"][0], 2) +
                 math.pow(corners["x_max"][1] - corners["y_max"][1], 2))
         }
-        LOG.critical("pcb_x_size: %s, pcb_y_size: %s" % (
-            pcb_sides["x_side"], pcb_sides["y_side"]))
+        # LOG.critical("pcb_x_size: %s, pcb_y_size: %s" % (
+            # pcb_sides["x_side"], pcb_sides["y_side"]))
         # shape koeff = pcb_x size / pcb_y size
         shape_koef = pcb_sides["x_side"] / pcb_sides["y_side"]
-        LOG.critical("shape_koef: %s" % (shape_koef,))
+        # LOG.critical("shape_koef: %s" % (shape_koef,))
         # original point from image
         src = np.float32(polygon)
 
