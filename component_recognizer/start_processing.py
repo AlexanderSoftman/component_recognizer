@@ -9,6 +9,7 @@ import component_recognizer.warper as warper
 import component_recognizer.histogram_equalizator as histogram_equalizator
 import component_recognizer.feature_processor as feature_processor
 import component_recognizer.pcb_component_db as pcb_component_db
+import component_recognizer.ref_circle_searcher as ref_circle_searcher
 
 
 pcb_image = cv2.imread(
@@ -34,6 +35,8 @@ pcb_pos_file = os.path.join(
     "pcb_pos",
     "pcb.pos")
 
+circle_test_image = "/home/afomin/projects/mj/component_recognizer/Warper:warp:1_warped_image.png"
+
 # this color used for filtering pcb image by color
 delta_sensitivity = 20
 # hsv pink: [136 105 255]
@@ -47,36 +50,39 @@ def main():
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(message)s')
-    # step 1 read pos file
-    pcb_component_reader_m = pcb_component_db.PCBComponentDB(pcb_pos_file)
-    return
-    # initialization phase
-    calibrator_m = calibrator.Calibrator()
-    settings_m = settings.Settings()
-    contour_searcher_m = contour_searcher.ContourSearcher(
-        clean_pcb_bg)
-    warper_m = warper.Warper()
-    hist_equalizator_m = histogram_equalizator.HistEqualizator()
-    feature_processor_m = feature_processor.FeatureProcessor()
-
-    # get calibration
+    # initialization
+    # calibrator_m = calibrator.Calibrator()
+    # settings_m = settings.Settings()
+    # contour_searcher_m = contour_searcher.ContourSearcher(
+    #     clean_pcb_bg)
+    # warper_m = warper.Warper()
+    # hist_equalizator_m = histogram_equalizator.HistEqualizator()
+    ref_circle_searcher_m = ref_circle_searcher.RefCircleSearcher()
+    # # step 0 - get calibration
     # camera_calibration = calibrator_m.get_calibration(
-        # settings_m.calibration_file_folder)
+    #     settings_m.calibration_file_folder)
+    # # feature_processor_m = feature_processor.FeatureProcessor()
+    # # step 1 read pos file
+    # pcb_component_reader_m = pcb_component_db.PCBComponentDB(pcb_pos_file)
+    # step 2 find zero dot - reper dot or angle of pcb
     # test_image_calibrated = calibrator_m.apply_calibration(
         # test_image,
         # camera_calibration)
+    # pcb_image_calibrated = pcb_image
+    # pcb_corners = contour_searcher_m.find_contour_dots(
+    #     pcb_image_calibrated)
+    # warped_pcb_image = warper_m.warp(
+    #     pcb_image_calibrated,
+    #     pcb_corners)
+    # pcb_image_res = hist_equalizator_m.equalizate(
+    #     warped_pcb_image)
+    ref_circle_searcher_m.find_ref_circles(circle_test_image)
+    return
+    # initialization phase
 
-    pcb_image_calibrated = pcb_image
-    pcb_corners = contour_searcher_m.find_contour_dots(
-        pcb_image_calibrated)
-    warped_pcb_image = warper_m.warp(
-        pcb_image_calibrated,
-        pcb_corners)
-    pcb_image_res = hist_equalizator_m.equalizate(
-        warped_pcb_image)
 
 
-    component_image_res = component_image
+    # component_image_res = component_image
     # component_corners = contour_searcher_m.find_contour_dots(
     #     component_image_calibrated)
     # warped_component_image = warper_m.warp(
@@ -85,15 +91,15 @@ def main():
     # component_image_equalizated = hist_equalizator_m.equalizate(
     #     warped_component_image)
 
-    bg_kp, bg_des = feature_processor_m.get_features(pcb_feature_image)
-    obj_kp, obj_des = feature_processor_m.get_features(component_image_res)
-    feature_processor_m.find_matches(
-        pcb_feature_image,
-        bg_kp,
-        bg_des,
-        component_image_res,
-        obj_kp,
-        obj_des)
+    # bg_kp, bg_des = feature_processor_m.get_features(pcb_feature_image)
+    # obj_kp, obj_des = feature_processor_m.get_features(component_image_res)
+    # feature_processor_m.find_matches(
+    #     pcb_feature_image,
+    #     bg_kp,
+    #     bg_des,
+    #     component_image_res,
+    #     obj_kp,
+    #     obj_des)
 
 
 if __name__ == '__main__':

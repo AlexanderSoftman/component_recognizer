@@ -9,7 +9,7 @@ LOG = logging.getLogger(__name__)
 # class should save pcb geometric size as it was
 class Warper():
 
-    create_intermediate_images = False
+    create_intermediate_images = True
 
     # function get img and returned warped img
     # input:

@@ -7,7 +7,7 @@ LOG = logging.getLogger(__name__)
 
 class ContourSearcher():
 
-    create_intermediate_images = False
+    create_intermediate_images = True
 
     harris_corners = {
         'neighbourhood_block_size': 2,
