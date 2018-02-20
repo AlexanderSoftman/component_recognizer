@@ -8,6 +8,8 @@ import component_recognizer.contour_searcher as contour_searcher
 import component_recognizer.warper as warper
 import component_recognizer.histogram_equalizator as histogram_equalizator
 import component_recognizer.feature_processor as feature_processor
+import component_recognizer.pcb_component_db as pcb_component_db
+
 
 pcb_image = cv2.imread(
     os.path.join(
@@ -27,6 +29,11 @@ component_image = cv2.imread(
         "components_raw_images",
         "atmega_128_1.jpg"))
 
+pcb_pos_file = os.path.join(
+    os.path.split(__file__)[0],
+    "pcb_pos",
+    "pcb.pos")
+
 # this color used for filtering pcb image by color
 delta_sensitivity = 20
 # hsv pink: [136 105 255]
@@ -40,6 +47,9 @@ def main():
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(message)s')
+    # step 1 read pos file
+    pcb_component_reader_m = pcb_component_db.PCBComponentDB(pcb_pos_file)
+    return
     # initialization phase
     calibrator_m = calibrator.Calibrator()
     settings_m = settings.Settings()
